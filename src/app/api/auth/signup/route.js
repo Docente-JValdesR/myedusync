@@ -29,3 +29,9 @@ export async function POST(req) {
     );
   }
 }
+
+export async function GET({ params }) {
+  await connectDB();
+  const users = await User.find();
+  return NextResponse.json(users, { status: 200 });
+}
