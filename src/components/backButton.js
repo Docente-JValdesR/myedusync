@@ -1,4 +1,3 @@
-// crear boton de volver usando bootstrap y useRouter
 "use client";
 import { useRouter, usePathname } from "next/navigation";
 

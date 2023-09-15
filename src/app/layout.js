@@ -1,12 +1,9 @@
-import "bootstrap/dist/css/bootstrap.css";
+"use client";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import Providers from "./Providers";
-import dynamic from "next/dynamic";
 import BackButton from "@/components/backButton";
-
-const DynamicBootstrap = dynamic(
-  () => require("bootstrap/dist/js/bootstrap.min.js"),
-  { ssr: false }
-);
+import Navbar from "@/components/navbar";
 
 export const metadata = {
   title: "MyEduSync",
@@ -19,6 +16,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className="bg-primary vh-100">
         <Providers>
+          <Navbar />
           {children}
           <BackButton />
         </Providers>
