@@ -1,6 +1,7 @@
 import "bootstrap/dist/css/bootstrap.css";
 import Providers from "./Providers";
 import dynamic from "next/dynamic";
+import BackButton from "@/components/backButton";
 
 const DynamicBootstrap = dynamic(
   () => require("bootstrap/dist/js/bootstrap.min.js"),
@@ -16,8 +17,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="bg-primary">
-        <Providers>{children}</Providers>
+      <body className="bg-primary vh-100">
+        <Providers>
+          {children}
+          <BackButton />
+        </Providers>
       </body>
     </html>
   );

@@ -17,7 +17,7 @@ export default function Home() {
           />
           <button
             onClick={() => router.push("/login")}
-            className="btn btn-lg btn-light border text-primary mt-3"
+            className="btn btn-lg btn-light border text-primary mt-3 ms-md-5"
           >
             Sign In
           </button>

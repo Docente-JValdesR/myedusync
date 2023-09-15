@@ -1,11 +1,13 @@
 "use client";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 export default function Register() {
   const [error, setError] = useState(null);
-
   const { register, handleSubmit } = useForm();
+  const router = useRouter();
 
   const onSubmit = async (data) => {
     try {
@@ -17,21 +19,31 @@ export default function Register() {
         body: JSON.stringify(data),
       });
       const dataResponse = await response.json();
-      console.log(dataResponse);
+      const login = await signIn("credentials", {
+        redirect: false,
+        email: data.email,
+        password: data.password,
+      });
+      if (login.error) {
+        setError(login.error);
+        return;
+      }
+      router.push("/dashboard");
     } catch (error) {
       setError(error.message);
     }
   };
 
   return (
-    <div className="container min-vh-100">
+    <div className="container d-flex flex-column justify-content-center align-items-center min-vh-100 text-center text-white">
+      <h1 className="mb-5">Register with</h1>
+
       <form onSubmit={handleSubmit(onSubmit)}>
         {error && (
           <div className="alert alert-danger mt-3" role="alert">
             {error}
           </div>
         )}
-        <h1>Register</h1>
 
         <div className="form-group">
           <label className="form-label">Name</label>
@@ -88,11 +100,9 @@ export default function Register() {
             <option value="tutor">Tutor</option>
             <option value="alumno">Alumno</option>
             <option value="admin">Administrador</option>
-
-            <option value="superadmin">Super Administrador</option>
           </select>
         </div>
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className="btn btn-light text-primary mt-5">
           Submit
         </button>
       </form>

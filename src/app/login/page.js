@@ -36,7 +36,10 @@ export default function Login() {
   };
 
   return (
-    <div className="container d-flex justify-content-center align-items-center min-vh-100 text-center">
+    <div className="container d-flex flex-column justify-content-center align-items-center min-vh-100 text-center">
+      <div className="row">
+        <h1 className="text-white my-5">Login with</h1>
+      </div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="form-group text-white mb-3">
           <label htmlFor="email">Email address</label>
@@ -82,12 +85,18 @@ export default function Login() {
           Submit
         </button>
       </form>
-      <button
-        onClick={() => router.push("/register")}
-        className="btn btn-light border text-primary mt-3"
-      >
-        Create Account
-      </button>
+      <div className="row">
+        <h1 className="text-white my-5">or Signup with</h1>
+      </div>
+
+      <div className="row">
+        <button
+          onClick={() => router.push("/register")}
+          className="btn btn-light border text-primary mb-3"
+        >
+          Create Account
+        </button>
+      </div>
     </div>
   );
 }
