@@ -16,6 +16,19 @@ const userSchema = new Schema({
     required: [true, "Please enter a password"],
     select: false,
   },
+  role: {
+    type: String,
+    enum: [
+      "docente",
+      "inspector",
+      "directivo",
+      "tutor",
+      "alumno",
+      "admin",
+      "superadmin",
+    ],
+    default: "alumno",
+  },
 });
 
 const User = models.User || model("User", userSchema);

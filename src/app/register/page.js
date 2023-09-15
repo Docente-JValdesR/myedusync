@@ -1,20 +1,38 @@
 "use client";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 export default function Register() {
-  const { register, handleSubmit, errors } = useForm();
+  const [error, setError] = useState(null);
+
+  const { register, handleSubmit } = useForm();
+
   const onSubmit = async (data) => {
-    const response = await fetch("/api/auth/signup", {
-      method: "POST",
-      body: JSON.stringify(data),
-    });
-    const result = await response.json();
-    console.log(result);
+    try {
+      const response = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      const dataResponse = await response.json();
+      console.log(dataResponse);
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
   return (
     <div className="container min-vh-100">
       <form onSubmit={handleSubmit(onSubmit)}>
+        {error && (
+          <div className="alert alert-danger mt-3" role="alert">
+            {error}
+          </div>
+        )}
+        <h1>Register</h1>
+
         <div className="form-group">
           <label className="form-label">Name</label>
           <input
@@ -56,6 +74,23 @@ export default function Register() {
               },
             })}
           />
+        </div>
+        <div className="form-group">
+          <label className="form-label">Role</label>
+          <select
+            className="form-control"
+            name="role"
+            {...register("role", { required: true })}
+          >
+            <option value="docente">Docente</option>
+            <option value="inspector">Inspector</option>
+            <option value="directivo">Directivo</option>
+            <option value="tutor">Tutor</option>
+            <option value="alumno">Alumno</option>
+            <option value="admin">Administrador</option>
+
+            <option value="superadmin">Super Administrador</option>
+          </select>
         </div>
         <button type="submit" className="btn btn-primary">
           Submit

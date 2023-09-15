@@ -82,6 +82,12 @@ export default function Login() {
           Submit
         </button>
       </form>
+      <button
+        onClick={() => router.push("/register")}
+        className="btn btn-light border text-primary mt-3"
+      >
+        Create Account
+      </button>
     </div>
   );
 }

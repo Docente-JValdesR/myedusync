@@ -19,13 +19,19 @@ const handler = NextAuth({
           userFound.password
         );
         if (!passwordMatch) throw new Error("Wrong password");
+        const user = {
+          _id: userFound._id,
+          email: userFound.email,
+          name: userFound.name,
+          role: userFound.role,
+        };
 
-        return userFound;
+        return user;
       },
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, account, profile }) {
       if (user) token.user = user;
       return token;
     },
