@@ -1,18 +1,13 @@
 "use client";
-import { usePathname } from "next/navigation";
 
-export default function navbar() {
-  const pathname = usePathname();
-  if (pathname === "/" || pathname === "/login/" || pathname === "/register/") {
-    return null;
-  }
+import { signOut } from "next-auth/react";
+import Link from "next/link";
 
+export default function navbar({ user }) {
   return (
     <nav className="navbar bg-body-tertiary fixed-top">
       <div className="container-fluid">
-        <a className="navbar-brand" href="#">
-          Offcanvas navbar
-        </a>
+        <p className="navbar-brand text-primary">Welcome {user?.name}</p>
         <button
           className="navbar-toggler"
           type="button"
@@ -30,8 +25,11 @@ export default function navbar() {
           aria-labelledby="offcanvasNavbarLabel"
         >
           <div className="offcanvas-header">
-            <h5 className="offcanvas-title" id="offcanvasNavbarLabel">
-              Offcanvas
+            <h5
+              className="offcanvas-title text-primary"
+              id="offcanvasNavbarLabel"
+            >
+              MyEduSync
             </h5>
             <button
               type="button"
@@ -43,45 +41,31 @@ export default function navbar() {
           <div className="offcanvas-body">
             <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
               <li className="nav-item">
-                <a className="nav-link active" aria-current="page" href="#">
-                  Home
-                </a>
+                <Link
+                  className="nav-link active"
+                  aria-current="page"
+                  href={`/dashboard/profile`}
+                >
+                  Mi perfil
+                </Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#">
-                  Link
-                </a>
+                <Link className="nav-link" href="/dashboard/clases">
+                  Horario de Clases
+                </Link>
               </li>
-              <li className="nav-item dropdown">
-                <a
-                  className="nav-link dropdown-toggle"
-                  href="#"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Dropdown
-                </a>
-                <ul className="dropdown-menu">
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Action
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Another action
-                    </a>
-                  </li>
-                  <li>
-                    <hr className="dropdown-divider" />
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Something else here
-                    </a>
-                  </li>
-                </ul>
+              <li className="nav-item">
+                <Link className="nav-link" href="/dashboard/curso">
+                  Mi Cursos
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" href="/dashboard/cursos">
+                  Cursos
+                </Link>
+              </li>
+              <li>
+                <button onClick={() => signOut()}>signOut</button>
               </li>
             </ul>
           </div>

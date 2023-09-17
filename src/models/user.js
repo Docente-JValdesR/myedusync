@@ -22,7 +22,6 @@ const userSchema = new Schema({
       "docente",
       "inspector",
       "directivo",
-      "tutor",
       "alumno",
       "admin",
       "superadmin",

@@ -4,9 +4,8 @@ import { useRouter, usePathname } from "next/navigation";
 export default function BackButton() {
   const router = useRouter();
   const pathname = usePathname();
-  if (pathname === "/" && pathname === "/login" && pathname === "/register") {
-    return null;
-  }
+
+  if (pathname === "/") return null;
   const goBack = () => {
     router.back();
   };

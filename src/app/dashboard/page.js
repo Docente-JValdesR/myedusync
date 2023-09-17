@@ -2,13 +2,15 @@
 import { useSession } from "next-auth/react";
 
 function DashboardPage() {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
   return (
-    <div>
-      <h1>Dashboard</h1>
-      <p>Session: {JSON.stringify(session)}</p>
-      <p>Status: {status}</p>
+    <div className="container mt-5 pt-5 text-white">
+      <div className="row">
+        <div className="col-12 bg-black">
+          <h1>Dashboard</h1>
+        </div>
+      </div>
     </div>
   );
 }

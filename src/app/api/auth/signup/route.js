@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { connectDB } from "../../../../libs/mongodb";
-import User from "../../../../models/user";
+import { connectDB } from "@/libs/mongodb";
+import User from "@/models/user";
 import bcrypt from "bcryptjs";
 
 export async function POST(req) {
@@ -22,16 +22,9 @@ export async function POST(req) {
       { status: 200 }
     );
   } catch (error) {
-    console.log(error);
     return NextResponse.json(
       { message: "Something went wrong" },
       { status: 400 }
     );
   }
-}
-
-export async function GET({ params }) {
-  await connectDB();
-  const users = await User.find();
-  return NextResponse.json(users, { status: 200 });
 }

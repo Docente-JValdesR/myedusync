@@ -18,7 +18,12 @@ export default function Register() {
         },
         body: JSON.stringify(data),
       });
-      const dataResponse = await response.json();
+
+      const result = await response.json();
+      console.log(result);
+      if (!response.ok) {
+        throw new Error(result.error);
+      }
       const login = await signIn("credentials", {
         redirect: false,
         email: data.email,

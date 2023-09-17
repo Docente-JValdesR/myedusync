@@ -31,14 +31,17 @@ const handler = NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, user, account, profile }) {
+    jwt({ token, user, account, profile }) {
       if (user) token.user = user;
       return token;
     },
-    async session({ session, token }) {
+    session({ session, token }) {
       session.user = token.user;
       return session;
     },
+  },
+  pages: {
+    signIn: "/login",
   },
 });
 
