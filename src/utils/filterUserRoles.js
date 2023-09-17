@@ -1,4 +1,5 @@
 import User from "@/models/user";
+import { NextResponse } from "next/server";
 
 export const filterUserRoles = (rolesToFilter) => {
   return async (req, next) => {
