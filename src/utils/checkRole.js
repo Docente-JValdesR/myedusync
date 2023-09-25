@@ -1,39 +1,19 @@
-import jwt from "jsonwebtoken";
-import { NextResponse } from "next/server";
-import { decode } from "next-auth/jwt";
+// crea un middleware que pueda verificar la propiedad role de una session creada con next-auth
 
-export const checkUserRole = (allowedRoles) => {
-  return async (req, next) => {
-    const authHeader = req.headers.get("authorization");
+// Path: src/utils/checkRole.js
 
-    const sessionToken = authHeader["next-auth.session-token"];
+import { getToken } from "next-auth/jwt";
 
-    console.log(sessionToken);
+const secret = process.env.NEXTAUTH_SECRET;
 
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      throw new Error("Authorization header missing");
+export function checkUserRole(roles) {
+  return async function (req, next) {
+    const users = await getToken({ req, secret });
+    const { role } = users.user;
+    if (roles.includes(role)) {
+      return next();
+    } else {
+      throw new Error("No tienes permisos para acceder a esta ruta");
     }
-
-    const token = authHeader.split(" ")[1];
-
-    const decodedToken = jwt.decode(token, { complete: true }, { json: true });
-    console.log(token);
-
-    if (!decodedToken || !decodedToken.user || !decodedToken.user.role) {
-      return NextResponse.json(
-        { message: "Authentication required" },
-        { status: 401 }
-      );
-    }
-
-    if (!allowedRoles.includes(decodedToken.user.role)) {
-      return NextResponse.json(
-        { message: "Insufficient permissions" },
-        { status: 403 }
-      );
-    }
-
-    // Continuar con el siguiente middleware o la función de ruta
-    next();
   };
-};
+}

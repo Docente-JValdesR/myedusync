@@ -1,12 +1,12 @@
 "use client";
 import Navbar from "@/components/navbar";
-import { useSession } from "next-auth/react";
+import { useUser } from "@/context/userContext";
 
 export default function RootLayout({ children }) {
-  const { data: session } = useSession();
+  const { session } = useUser();
   return (
     <section>
-      <Navbar user={session?.user} />
+      <Navbar session={session} />
       {children}
     </section>
   );

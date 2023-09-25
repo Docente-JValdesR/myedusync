@@ -3,11 +3,53 @@
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 
-export default function navbar({ user }) {
+const List = () => {
   return (
-    <nav className="navbar bg-body-tertiary fixed-top">
+    <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
+      <li className="nav-item">
+        <Link className="nav-link active" href="/dashboard">
+          Home
+        </Link>
+      </li>
+      <li className="nav-item">
+        <Link className="nav-link" href={`/dashboard/profile`}>
+          Mi perfil
+        </Link>
+      </li>
+      <li className="nav-item">
+        <Link className="nav-link" href="/dashboard/users">
+          Usuarios
+        </Link>
+      </li>
+      <li className="nav-item">
+        <Link className="nav-link" href="/dashboard/schedules">
+          Horario de Clases
+        </Link>
+      </li>
+      <li className="nav-item">
+        <Link className="nav-link" href="/dashboard/courses">
+          Mis Cursos
+        </Link>
+      </li>
+      <li>
+        <button
+          className="btn btn-primary border text-light"
+          onClick={() => signOut()}
+        >
+          signOut
+        </button>
+      </li>
+    </ul>
+  );
+};
+
+export default function Navbar({ session }) {
+  return (
+    <nav className="navbar navbar-expand-lg bg-body-tertiary fixed-top">
       <div className="container-fluid">
-        <p className="navbar-brand text-primary">Welcome {user?.name}</p>
+        <p className="navbar-brand text-primary">
+          Bienvenido {session?.user.name}
+        </p>
         <button
           className="navbar-toggler"
           type="button"
@@ -18,8 +60,11 @@ export default function navbar({ user }) {
         >
           <span className="navbar-toggler-icon"></span>
         </button>
+        <div className="navbar d-none d-lg-block">
+          <List />
+        </div>
         <div
-          className="offcanvas offcanvas-end"
+          className="offcanvas offcanvas-end d-lg-none"
           tabIndex="-1"
           id="offcanvasNavbar"
           aria-labelledby="offcanvasNavbarLabel"
@@ -39,35 +84,7 @@ export default function navbar({ user }) {
             ></button>
           </div>
           <div className="offcanvas-body">
-            <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
-              <li className="nav-item">
-                <Link
-                  className="nav-link active"
-                  aria-current="page"
-                  href={`/dashboard/profile`}
-                >
-                  Mi perfil
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" href="/dashboard/clases">
-                  Horario de Clases
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" href="/dashboard/curso">
-                  Mi Cursos
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" href="/dashboard/cursos">
-                  Cursos
-                </Link>
-              </li>
-              <li>
-                <button onClick={() => signOut()}>signOut</button>
-              </li>
-            </ul>
+            <List />
           </div>
         </div>
       </div>
