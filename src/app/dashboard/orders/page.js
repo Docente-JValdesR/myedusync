@@ -10,61 +10,32 @@ import {
   bloque3,
   bloque4,
 } from "@/json/order";
-function Modal({ rowIndex, colIndex }) {
-  return (
-    <div
-      className="modal"
-      tabIndex="-1"
-      id="exampleModal"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div className="modal-dialog modal-dialog-centered">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title">Modal Title</h5>
-            <button
-              type="button"
-              className="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-            <div className="modal-body">
-              <p>Modal body text goes here.</p>
-            </div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-primary">
-                Save changes
-              </button>
-              <button
-                type="button"
-                className="btn btn-secondary"
-                onClick={() => console.log(rowIndex, colIndex)}
-              >
-                ver en consola
-              </button>
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
+import Modal from "@/components/modal";
 
 function MatrizComponent() {
+  //estado de la matriz que se renderiza
   const [matriz, setMatriz] = useState([]);
-  const [displayNone, setDisplayNone] = useState([]);
-  const [order, setOrder] = useState(fila232);
   const [rowIndex, setRowIndex] = useState(0);
   const [colIndex, setColIndex] = useState(0);
-
+  //estado de los estudiantes que son asignados a la matriz
+  const [selectedStudents, setSelectedStudents] = useState([]);
+  //estado que se usa para ocultar los botones de la matriz
+  const [displayNone, setDisplayNone] = useState([]);
+  //estado que se usa para seleccionar el tipo de grupo
+  const [order, setOrder] = useState();
+  //estado que se usa para guardar los alumnos de la api
+  const [students, setStudents] = useState([]);
+  useEffect(() => {
+    console.log({
+      rowIndex,
+      colIndex,
+      selectedStudents,
+      displayNone,
+      order,
+      students,
+    });
+  }, [rowIndex, colIndex, selectedStudents, displayNone, order, students]);
+  //crea la matriz de 12x10
   useEffect(() => {
     let tempMatriz = [];
     for (let i = 0; i < 12; i++) {
@@ -75,19 +46,36 @@ function MatrizComponent() {
     }
     setMatriz(tempMatriz);
   }, []);
+  //obtiene los alumnos de la api
+  useEffect(() => {
+    const getStudents = async () => {
+      const res = await fetch("https://jsonplaceholder.org/users");
+      const data = await res.json();
+      setStudents(data);
+    };
+    getStudents();
+  }, []);
+  //carga los ordenes en el estado
+
+  //funcion que se ejecuta cuando se selecciona un alumno
+  const onSelectStudent = (rowIndex, colIndex, studentId) => {
+    let newSelected = [...selectedStudents];
+    if (!newSelected[rowIndex]) newSelected[rowIndex] = [];
+    newSelected[rowIndex][colIndex] = students.find(
+      (student) => student.id === parseInt(studentId)
+    );
+    setSelectedStudents(newSelected);
+  };
 
   return (
     <div className="container mt-5 pt-5">
-      <button
-        type="button"
-        className="btn btn-light border text-primary mb-3"
-        data-bs-toggle="modal"
-        data-bs-target="#exampleModal"
-      >
-        Launch demo modal
-      </button>
-      <Modal rowIndex={rowIndex} colIndex={colIndex} />
-      <div className="">
+      <Modal
+        rowIndex={rowIndex}
+        colIndex={colIndex}
+        students={students}
+        onSelectStudent={onSelectStudent}
+      />
+      <div className="text-light">
         <label className="form-label">selecciona el tipo de grupo</label>
         <select
           className="form-control"
@@ -120,7 +108,7 @@ function MatrizComponent() {
                 setDisplayNone(bloque4);
                 break;
               default:
-                setDisplayNone();
+                setDisplayNone(order);
                 break;
             }
           }}
@@ -142,18 +130,25 @@ function MatrizComponent() {
           {row.map((colValue, colIndex) => (
             <div
               key={`${rowIndex}-${colIndex}`}
-              className={`col-1 rounded  m-1  ${
+              className={`col-1 rounded  m-1 p-3 ${
                 displayNone?.includes(`${rowIndex}-${colIndex}`)
                   ? "disabled"
                   : "text-light bg-dark text-center btn "
               }`}
-              data-bs-toggle="modal"
+              data-bs-toggle={`${
+                displayNone?.includes(`${rowIndex}-${colIndex}`) ? "" : "modal"
+              }`}
               data-bs-target="#exampleModal"
               onClick={() => {
                 setRowIndex(rowIndex);
                 setColIndex(colIndex);
               }}
-            ></div>
+            >
+              {selectedStudents[rowIndex] &&
+              selectedStudents[rowIndex][colIndex]
+                ? selectedStudents[rowIndex][colIndex].firstname
+                : ""}
+            </div>
           ))}
         </div>
       ))}

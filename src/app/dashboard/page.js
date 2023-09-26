@@ -64,11 +64,15 @@ function DashboardPage() {
             path={"courses"}
             icon={"bi bi-journal-check"}
           />
-
           <DashboardButton
             name={"Horarios"}
             path={"schedules"}
             icon={"bi bi-calendar-check"}
+          />
+          <DashboardButton
+            name={"Orden de cursos"}
+            path={"orders"}
+            icon={"bi bi-border-style"}
           />
         </div>
       </div>
